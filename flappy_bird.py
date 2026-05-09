@@ -10,6 +10,7 @@ from pipe import *
 from game import screen
 
 from resources import *
+from constants import *
 
 # You can set constants in the constants.py file!
 
@@ -132,9 +133,14 @@ def main():
                 # If yes, add +1 to the score.
                 # Don't forget to update the pipe's has_been_passed value to True!
                 # You can try to play a point sound here as well.
+                if pipe.has_been_passed == False and bird.x > pipe.x + 25:
+                    pipe.has_been_passed = True
+                    score += 1
+                    PIPE_VELOCITY += 0.5
 
                 # TODO: Play a sound!
                 # Play the point sound here.
+                    point_sound.play()
 
                 # Removes the pipe when it's off screen
                 if pipe.off_screen():
@@ -147,7 +153,9 @@ def main():
                     pipes.append(Pipe())
 
                 # TODO: Generate new pipes
-                
+                if SCREEN_WIDTH - pipes[-1].x >= DISTANCE_BETWEEN_PIPES:
+                    pipes.append(Pipe())
+
 
             # Collision detection
             for pipe in pipes:
@@ -160,6 +168,8 @@ def main():
                         game_state = "dead"
                         # TODO: Play a sound!
                         # Play the hurt sound here.
+                        hurt_sound.play()
+
 
             # Display the live score counter
             score_text = font_large.render(str(math.floor(score)), True, (255, 255, 255))
